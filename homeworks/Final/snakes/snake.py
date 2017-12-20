@@ -1,9 +1,8 @@
 from homeworks.Final.snakes.player import Player
 
-DIRECTIONS = {'UP': (0, -1), 'DOWN': (0, 1), 'LEFT': (-1, 0), 'RIGHT': (1, 0)}
-
-
 class Snake:
+    DIRECTIONS = {'UP': (0, -1), 'DOWN': (0, 1), 'LEFT': (-1, 0), 'RIGHT': (1, 0)}
+
     body = []
     direction = ()  # x,y
     color = ()
@@ -39,6 +38,8 @@ class Snake:
 
     def add_tail(self, length: int = 1):
         self.tail_add += length
+        # Add score for player
+        self.player.score += length
 
     def remove_head(self, length: int = 1):
         self.head_remove += length
@@ -46,8 +47,8 @@ class Snake:
     def move(self):
         if self.head_remove == 0:
             # Move head forward
-            new_head = (self.get_head()[0] + DIRECTIONS.get(self.direction)[0],
-                        self.get_head()[1] + DIRECTIONS.get(self.direction)[1])
+            new_head = (self.get_head()[1] + self.direction[1],
+                        self.get_head()[0] + self.direction[0])
             self.get_body().insert(0, new_head)
         else:
             self.head_remove -= 1
@@ -57,3 +58,7 @@ class Snake:
             self.get_body().pop(-1)
         else:
             self.tail_add -= 1
+
+    def eliminate(self):
+        self.player.snake_death_process()
+
